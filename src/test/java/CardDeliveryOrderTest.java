@@ -1,9 +1,7 @@
 import org.junit.jupiter.api.Test;
-import org.openqa.selenium.Keys;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 
-import java.time.Duration;
-import java.time.LocalDate;
+import java.time.*;
 import java.time.format.DateTimeFormatter;
 
 import static com.codeborne.selenide.Condition.*;
@@ -179,6 +177,6 @@ public class CardDeliveryOrderTest {
         $("[data-test-id=phone] input").setValue("+79600000000");
         $x("//*[contains(text(),'Забронировать')]").click();
         WebElement check = $("[data-test-id=agreement].input_invalid");
-        assertFalse(check.isSelected());
+        assertTrue(check.isDisplayed());
     }
 }
