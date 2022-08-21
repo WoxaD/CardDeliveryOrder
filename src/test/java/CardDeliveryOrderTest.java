@@ -1,4 +1,4 @@
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.openqa.selenium.*;
 
 import java.time.*;
@@ -11,12 +11,16 @@ import static org.junit.jupiter.api.Assertions.*;
 public class CardDeliveryOrderTest {
 
     String date(int days) {
-        return LocalDate.now().plusDays(days).format(DateTimeFormatter.ofPattern("dd-MM-yyyy"));
+        return LocalDate.now().plusDays(days).format(DateTimeFormatter.ofPattern("dd.MM.yyyy"));
+    }
+
+    @BeforeEach
+    void setup() {
+        open("http://localhost:9999");
     }
 
     @Test
     void shouldFillTheFormWithNormalData() {
-        open("http://localhost:9999");
         $("[data-test-id=city] input").setValue("Казань");
         $("[data-test-id=date] input").doubleClick().sendKeys(Keys.BACK_SPACE, date(3));
         $("[data-test-id=name] input").setValue("Петров Иван");
@@ -25,12 +29,11 @@ public class CardDeliveryOrderTest {
         $x("//*[contains(text(), 'Забронировать')]").click();
         $("[data-test-id=notification]")
                 .shouldBe(visible, Duration.ofSeconds(15))
-                .shouldHave(text("успешно забронирована"));
+                .shouldHave(text("успешно забронирована на " + date(3)));
     }
 
     @Test
     void shouldFillTheFormWithADoubleName() {
-        open("http://localhost:9999");
         $("[data-test-id=city] input").setValue("Казань");
         $("[data-test-id=date] input").doubleClick().sendKeys(Keys.BACK_SPACE, date(3));
         $("[data-test-id=name] input").setValue("Петрова Анна-Мария");
@@ -39,12 +42,11 @@ public class CardDeliveryOrderTest {
         $x("//*[contains(text(), 'Забронировать')]").click();
         $("[data-test-id=notification]")
                 .shouldBe(visible, Duration.ofSeconds(15))
-                .shouldHave(text("успешно забронирована"));
+                .shouldHave(text("успешно забронирована на " + date(3)));
     }
 
     @Test
     void shouldFillTheFormWithNotInTheListCity() {
-        open("http://localhost:9999");
         $("[data-test-id=city] input").setValue("Иннополис");
         $("[data-test-id=date] input").doubleClick().sendKeys(Keys.BACK_SPACE, date(3));
         $("[data-test-id=name] input").setValue("Петров Иван");
@@ -58,7 +60,6 @@ public class CardDeliveryOrderTest {
 
     @Test
     void shouldFillTheFormWithoutCity() {
-        open("http://localhost:9999");
         $("[data-test-id=city] input").setValue("");
         $("[data-test-id=date] input").doubleClick().sendKeys(Keys.BACK_SPACE, date(3));
         $("[data-test-id=name] input").setValue("Петров Иван");
@@ -72,7 +73,6 @@ public class CardDeliveryOrderTest {
 
     @Test
     void shouldFillTheFormWithWrongDate() {
-        open("http://localhost:9999");
         $("[data-test-id=city] input").setValue("Казань");
         $("[data-test-id=date] input").doubleClick().sendKeys(Keys.BACK_SPACE, date(2));
         $("[data-test-id=name] input").setValue("Петров Иван");
@@ -86,7 +86,6 @@ public class CardDeliveryOrderTest {
 
     @Test
     void shouldFillTheFormWithoutDate() {
-        open("http://localhost:9999");
         $("[data-test-id=city] input").setValue("Казань");
         $("[data-test-id=date] input").doubleClick().sendKeys(Keys.BACK_SPACE);
         $("[data-test-id=name] input").setValue("Петров Иван");
@@ -100,7 +99,6 @@ public class CardDeliveryOrderTest {
 
     @Test
     void shouldFillTheFormWithLatinLettersInName() {
-        open("http://localhost:9999");
         $("[data-test-id=city] input").setValue("Казань");
         $("[data-test-id=date] input").doubleClick().sendKeys(Keys.BACK_SPACE, date(3));
         $("[data-test-id=name] input").setValue("Petrov Ivan");
@@ -114,7 +112,6 @@ public class CardDeliveryOrderTest {
 
     @Test
     void shouldFillTheFormWithInvalidSymbolsInName() {
-        open("http://localhost:9999");
         $("[data-test-id=city] input").setValue("Казань");
         $("[data-test-id=date] input").doubleClick().sendKeys(Keys.BACK_SPACE, date(3));
         $("[data-test-id=name] input").setValue("Петров1 Иван!");
@@ -128,7 +125,6 @@ public class CardDeliveryOrderTest {
 
     @Test
     void shouldFillTheFormWithoutAName() {
-        open("http://localhost:9999");
         $("[data-test-id=city] input").setValue("Казань");
         $("[data-test-id=date] input").doubleClick().sendKeys(Keys.BACK_SPACE, date(3));
         $("[data-test-id=name] input").setValue("");
@@ -142,7 +138,6 @@ public class CardDeliveryOrderTest {
 
     @Test
     void shouldFillTheFormWithNInvalidPhone() {
-        open("http://localhost:9999");
         $("[data-test-id=city] input").setValue("Казань");
         $("[data-test-id=date] input").doubleClick().sendKeys(Keys.BACK_SPACE, date(3));
         $("[data-test-id=name] input").setValue("Петров Иван");
@@ -156,7 +151,6 @@ public class CardDeliveryOrderTest {
 
     @Test
     void shouldFillTheFormWithoutAPhone() {
-        open("http://localhost:9999");
         $("[data-test-id=city] input").setValue("Казань");
         $("[data-test-id=date] input").doubleClick().sendKeys(Keys.BACK_SPACE, date(3));
         $("[data-test-id=name] input").setValue("Петров Иван");
@@ -170,7 +164,6 @@ public class CardDeliveryOrderTest {
 
     @Test
     void shouldFillTheFormWithoutACheckBox() {
-        open("http://localhost:9999");
         $("[data-test-id=city] input").setValue("Казань");
         $("[data-test-id='date'] input").doubleClick().sendKeys(Keys.BACK_SPACE, date(3));
         $("[data-test-id=name] input").setValue("Петров Иван");
